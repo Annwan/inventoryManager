@@ -1,0 +1,2 @@
+CLS
+python "main.py"
