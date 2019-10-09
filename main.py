@@ -1,5 +1,5 @@
 from asciimatics.widgets import Frame, ListBox, Layout, Divider, Text, \
-    Button, TextBox, Widget, MultiColumnListBox
+    Button, TextBox, Widget, MultiColumnListBox, Label
 from asciimatics.scene import Scene
 from asciimatics.screen import Screen
 from asciimatics.exceptions import ResizeScreenError, NextScene, StopApplication
@@ -192,8 +192,8 @@ class RackView(Frame):
     def __init__(self, screen, model, rack = "A"):
         super(RackView, self).__init__(
             screen,
-            screen.height * 4 // 5,
-            screen.width * 4 // 5,
+            screen.height,
+            screen.width,
             hover_focus=True,
             title=f"Rack {rack}",
             can_scroll=False,
@@ -210,17 +210,23 @@ class RackView(Frame):
             self.add_layout(layout)
             layout.add_widget(Label(label=f"{r}"), 0)
             for c in range(1,6):
-                layout.add_widget(Label(label=f"{rack}{r}{c}"), c)
+                lab = Button(text=f"{rack}{r}{c}", on_click=lambda:self._onButtonPress(r, c))
+                lab.disabled = (r == 9 and c >= 2) or (r == 8 and c == 5)
+                layout.add_widget(lab, c)
+            ly3 = Layout([100])
+            self.add_layout(ly3)
+            ly3.add_widget(Label(label=""))
         
-        ly2 = Layout[100]
+        ly2 = Layout([100])
         self.add_layout(ly2)
         ly2.add_widget(Button("Quit", self._quit))
         self.fix()
         
     
-    def _onselection(self, button):
-        pass
+    def _onButtonPress(self, row, col):
+        raise NextScene("Main")
 
+    
     @staticmethod
     def _quit():
         raise StopApplication("")
@@ -229,8 +235,9 @@ class RackView(Frame):
 
 def demo(screen, scene):
     scenes = [
-        Scene([ListView(screen, parts)], -1, name="Main"),
-        Scene([PartView(screen, parts)], -1, name="Edit Part")
+        Scene([RackView(screen, parts, "B")], -1, name="Main")
+        #Scene([ListView(screen, parts)], -1, name="Main"),
+        #Scene([PartView(screen, parts)], -1, name="Edit Part")
     ]
 
     screen.play(scenes, stop_on_resize=True, start_scene=scene, allow_int=True)
