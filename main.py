@@ -1,5 +1,5 @@
 from asciimatics.widgets import Frame, ListBox, Layout, Divider, Text, \
-    Button, TextBox, Widget
+    Button, TextBox, Widget, MultiColumnListBox
 from asciimatics.scene import Scene
 from asciimatics.screen import Screen
 from asciimatics.exceptions import ResizeScreenError, NextScene, StopApplication
@@ -154,7 +154,7 @@ class PartView(Frame):
                                           reduce_cpu=True)
         # Save off the model that accesses the parts database.
         self._model = model
-
+        
         # Create the form for displaying the list of parts.
         layout = Layout([100], fill_frame=True)
         self.add_layout(layout)
@@ -185,6 +185,46 @@ class PartView(Frame):
     @staticmethod
     def _cancel():
         raise NextScene("Main")
+
+
+class RackView(Frame):
+    
+    def __init__(self, screen, model, rack = "A"):
+        super(RackView, self).__init__(
+            screen,
+            screen.height * 4 // 5,
+            screen.width * 4 // 5,
+            hover_focus=True,
+            title=f"Rack {rack}",
+            can_scroll=False,
+            reduce_cpu=True
+        )
+        self._rack = rack
+        self._model = model
+        ly = Layout([1,2,2,2,2,2])
+        self.add_layout(ly)
+        for c in range(1,6):
+            ly.add_widget(Label(label=f"{c}"), c)
+        for r in range(10):
+            layout = Layout([1,2,2,2,2,2])
+            self.add_layout(layout)
+            layout.add_widget(Label(label=f"{r}"), 0)
+            for c in range(1,6):
+                layout.add_widget(Label(label=f"{rack}{r}{c}"), c)
+        
+        ly2 = Layout[100]
+        self.add_layout(ly2)
+        ly2.add_widget(Button("Quit", self._quit))
+        self.fix()
+        
+    
+    def _onselection(self, button):
+        pass
+
+    @staticmethod
+    def _quit():
+        raise StopApplication("")
+        
 
 
 def demo(screen, scene):
