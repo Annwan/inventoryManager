@@ -77,7 +77,7 @@ class InventoryModel(object):
         self._db.commit()
 
 
-class ListView(Frame):
+class ListPlace(Frame):
     def __init__(self, screen, model):
         super(ListView, self).__init__(screen,
                                        screen.height * 4 // 5,
@@ -108,7 +108,6 @@ class ListView(Frame):
         layout2.add_widget(Button("Add", self._add), 0)
         layout2.add_widget(self._edit_button, 1)
         layout2.add_widget(self._delete_button, 2)
-        layout2.add_widget(Button("Search", self._search), 3)
         layout2.add_widget(Button("Quit", self._quit), 4)
         self.fix()
         self._on_pick()
@@ -124,7 +123,7 @@ class ListView(Frame):
     def _add(self):
         self._model.current_id = None
         raise NextScene("Edit Part")
-    
+
     def _edit(self):
         self.save()
         self._model.current_id = self.data["parts"]
@@ -154,7 +153,7 @@ class PartView(Frame):
                                           reduce_cpu=True)
         # Save off the model that accesses the parts database.
         self._model = model
-        
+
         # Create the form for displaying the list of parts.
         layout = Layout([100], fill_frame=True)
         self.add_layout(layout)
@@ -188,7 +187,7 @@ class PartView(Frame):
 
 
 class RackView(Frame):
-    
+
     def __init__(self, screen, model, rack = "A"):
         super(RackView, self).__init__(
             screen,
@@ -216,21 +215,21 @@ class RackView(Frame):
             ly3 = Layout([100])
             self.add_layout(ly3)
             ly3.add_widget(Label(label=""))
-        
+
         ly2 = Layout([100])
         self.add_layout(ly2)
         ly2.add_widget(Button("Quit", self._quit))
         self.fix()
-        
-    
-    def _onButtonPress(self, row, col):
-        raise NextScene("Main")
 
-    
+
+    def _onButtonPress(self, row, col):
+        raise NextScene("ListPieces")
+
+
     @staticmethod
     def _quit():
         raise StopApplication("")
-        
+
 
 
 def demo(screen, scene):
