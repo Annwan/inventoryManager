@@ -124,7 +124,7 @@ class ListView(Frame):
     def _add(self):
         self._model.current_id = None
         raise NextScene("Edit Part")
-    
+
     def _edit(self):
         self.save()
         self._model.current_id = self.data["parts"]
@@ -154,7 +154,7 @@ class PartView(Frame):
                                           reduce_cpu=True)
         # Save off the model that accesses the parts database.
         self._model = model
-        
+
         # Create the form for displaying the list of parts.
         layout = Layout([100], fill_frame=True)
         self.add_layout(layout)
@@ -188,7 +188,7 @@ class PartView(Frame):
 
 
 class RackView(Frame):
-    
+
     def __init__(self, screen, model, rack = "A"):
         super(RackView, self).__init__(
             screen,
@@ -208,7 +208,7 @@ class RackView(Frame):
         for r in range(10):
             layout = Layout([1,2,2,2,2,2])
             self.add_layout(layout)
-            layout.add_widget(Label(label=f"{r}"), 0)
+            layout.add_widget(Label(label=f"{r}", align="^"), 0)
             for c in range(1,6):
                 lab = Button(text=f"{rack}{r}{c}", on_click=lambda:self._onButtonPress(r, c))
                 lab.disabled = (r == 9 and c >= 2) or (r == 8 and c == 5)
@@ -216,21 +216,21 @@ class RackView(Frame):
             ly3 = Layout([100])
             self.add_layout(ly3)
             ly3.add_widget(Label(label=""))
-        
         ly2 = Layout([100])
+
         self.add_layout(ly2)
         ly2.add_widget(Button("Quit", self._quit))
         self.fix()
-        
-    
+
+
     def _onButtonPress(self, row, col):
         raise NextScene("Main")
 
-    
+
     @staticmethod
     def _quit():
         raise StopApplication("")
-        
+
 
 
 def demo(screen, scene):
