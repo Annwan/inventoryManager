@@ -4,12 +4,12 @@ from asciimatics.exceptions import ResizeScreenError
 import sys
 
 from model import InventoryModel
-from views import BoxListView, RackView, PartView#, MainView
+from views import BoxListView, RackView, PartView#, MainView#, ListAllView
 
 
 def demo(screen, scene):
     scenes = [
-        #Scene([MainView(screen, parts)], -1, name="Main"),
+        Scene([MainView(screen, parts)], -1, name="Main"),
         Scene([RackView(screen, parts, "A")], -1, name="RackA"),
         Scene([RackView(screen, parts, "B")], -1, name="RackB"),
         Scene([RackView(screen, parts, "C")], -1, name="RackC"),

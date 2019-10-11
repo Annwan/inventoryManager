@@ -2,6 +2,34 @@ from asciimatics.widgets import Frame, ListBox, Layout, Divider, Text, \
     Button, TextBox, Widget, MultiColumnListBox, Label
 from asciimatics.exceptions import NextScene, StopApplication
 
+
+class MainView(Frame):
+    def __init__(self, screen, model):
+        super(MainView, self).__init__(
+                screen,
+                screen.height,
+                screen.width,
+                hover_focus=True,
+                can_scroll=False,
+                title = "Titre temporaire"
+        )
+        self._model = model
+        for r in "ABCDE":
+            ly=Layout([100])
+            self.add_layout(ly);
+            ly.add_widget(Button("", lambda:self._to_rack(r))
+        ly2=layout([100])
+        self.add_layout(ly2)
+        ly2.add_widget(Button("Quit",self._quit))
+    
+    @staticmethod
+    def _to_rack(r):
+        raise NextScene(f"Rack{r}")
+    
+    @staticmethod
+    def _quit():
+        raise StopApplication("User Quitted")
+
 class BoxListView(Frame):
     def __init__(self, screen, model):
         super(BoxListView, self).__init__(screen,
@@ -94,7 +122,7 @@ class RackView(Frame):
             ly3.add_widget(Label(label=""))
         ly2 = Layout([100])
         self.add_layout(ly2)
-        ly2.add_widget(Button("Quit", self._quit))
+        ly2.add_widget(Button("Back", self._back))
         self.fix()
 
     def _onButtonPress(self, row, col):
@@ -102,8 +130,8 @@ class RackView(Frame):
         raise NextScene("Box")
 
     @staticmethod
-    def _quit():
-        raise StopApplication("")
+    def _back):
+        raise NextScene("Main")
 
 
 class PartView(Frame):
