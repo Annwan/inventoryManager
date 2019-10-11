@@ -4,7 +4,7 @@ from asciimatics.exceptions import ResizeScreenError
 import sys
 
 from model import InventoryModel
-from views import BoxListView, RackView, PartView#, MainView#, ListAllView
+from views import BoxListView, RackView, PartView, MainView#, ListAllView
 
 
 def demo(screen, scene):

@@ -14,18 +14,35 @@ class MainView(Frame):
                 title = "Titre temporaire"
         )
         self._model = model
-        for r in "ABCDE":
-            ly=Layout([100])
-            self.add_layout(ly);
-            ly.add_widget(Button("", lambda:self._to_rack(r))
-        ly2=layout([100])
+        lay=Layout([1,1,8],fill_frame=True)
+        self.add_layout(lay);
+        lay.add_widget(Button(f"Rack A", lambda:self._to_rack("A")),0)
+        lay.add_widget(Button(f"Rack B", lambda:self._to_rack("B")),0)
+        lay.add_widget(Button(f"Rack C", lambda:self._to_rack("C")),0)
+        lay.add_widget(Button(f"Rack D", lambda:self._to_rack("D")),0)
+        lay.add_widget(Button(f"Rack E", lambda:self._to_rack("E")),0)
+
+        lay.add_widget(Label(label=f"TestValeur1A"), 1)
+        lay.add_widget(Label(label=f"TestValeur1B"), 1)
+        lay.add_widget(Label(label=f"TestValeur1C"), 1)
+        lay.add_widget(Label(label=f"TestValeur1D"), 1)
+        lay.add_widget(Label(label=f"TestValeur1E"), 1)
+
+        lay.add_widget(Label(label=f"TestValeur2A"), 2)
+        lay.add_widget(Label(label=f"TestValeur2B"), 2)
+        lay.add_widget(Label(label=f"TestValeur2C"), 2)
+        lay.add_widget(Label(label=f"TestValeur2D"), 2)
+        lay.add_widget(Label(label=f"TestValeur2E"), 2)
+
+        ly2=Layout([100])
         self.add_layout(ly2)
         ly2.add_widget(Button("Quit",self._quit))
-    
+        self.fix()
+
     @staticmethod
     def _to_rack(r):
         raise NextScene(f"Rack{r}")
-    
+
     @staticmethod
     def _quit():
         raise StopApplication("User Quitted")
@@ -130,7 +147,7 @@ class RackView(Frame):
         raise NextScene("Box")
 
     @staticmethod
-    def _back):
+    def _back():
         raise NextScene("Main")
 
 
@@ -171,8 +188,8 @@ class PartView(Frame):
     def _ok(self):
         self.save()
         self._model.update_current_part(self.data)
-        raise NextScene("Main")
+        raise NextScene("Box")
 
     @staticmethod
     def _cancel():
-        raise NextScene("Main")
+        raise NextScene("Box")
