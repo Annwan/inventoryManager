@@ -14,7 +14,7 @@ class InventoryModel(object):
                     mcat TEXT,
                     scat1 TEXT,
                     scat2 TEXT,
-                    amnt TEXT,
+                    amnt INT,
                     pos TEXT,
                     desc TEXT)
             ''')
@@ -65,3 +65,17 @@ class InventoryModel(object):
         self._db.cursor().execute('''
             DELETE FROM parts WHERE id=:id''', {"id": part_id})
         self._db.commit() 
+
+    def count_empty(self, rack):
+        count = 0
+        for i in self._db.cursor().execute('SELECT amnt, pos FROM parts').fetchall():
+            if i[0] == 0 and i[1][0] == rack:
+                count+=1
+        return count
+
+    def list_empty(self, rack):
+        lst = []
+        for i in self._db.cursor().execute('SELECT amnt, pos, name FROM parts').fetchall():
+            if i[0] == 0 and i[1][0] == rack:
+                lst.append(i[2])
+        return lst

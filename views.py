@@ -9,6 +9,7 @@ class MainView(Frame):
                 screen,
                 screen.height,
                 screen.width,
+                on_load=self._on_load,
                 hover_focus=True,
                 can_scroll=False,
                 title = "Titre temporaire"
@@ -16,28 +17,85 @@ class MainView(Frame):
         self._model = model
         lay=Layout([1,1,8],fill_frame=True)
         self.add_layout(lay);
+        lay.add_widget(Label("Rack"), 0)
+        lay.add_widget(Label(""), 0)
         lay.add_widget(Button(f"Rack A", lambda:self._to_rack("A")),0)
+        lay.add_widget(Label(""), 0)
         lay.add_widget(Button(f"Rack B", lambda:self._to_rack("B")),0)
+        lay.add_widget(Label(""), 0)
         lay.add_widget(Button(f"Rack C", lambda:self._to_rack("C")),0)
+        lay.add_widget(Label(""), 0)
         lay.add_widget(Button(f"Rack D", lambda:self._to_rack("D")),0)
+        lay.add_widget(Label(""), 0)
         lay.add_widget(Button(f"Rack E", lambda:self._to_rack("E")),0)
 
-        lay.add_widget(Label(label=f"TestValeur1A"), 1)
-        lay.add_widget(Label(label=f"TestValeur1B"), 1)
-        lay.add_widget(Label(label=f"TestValeur1C"), 1)
-        lay.add_widget(Label(label=f"TestValeur1D"), 1)
-        lay.add_widget(Label(label=f"TestValeur1E"), 1)
+        self._l_qt_A=Label(label="")
+        self._l_qt_B=Label(label="")
+        self._l_qt_C=Label(label="")
+        self._l_qt_D=Label(label="")
+        self._l_qt_E=Label(label="")
 
-        lay.add_widget(Label(label=f"TestValeur2A"), 2)
-        lay.add_widget(Label(label=f"TestValeur2B"), 2)
-        lay.add_widget(Label(label=f"TestValeur2C"), 2)
-        lay.add_widget(Label(label=f"TestValeur2D"), 2)
-        lay.add_widget(Label(label=f"TestValeur2E"), 2)
+        lay.add_widget(Label("#Vide"), 1)
+        lay.add_widget(Label(""), 1)
+        lay.add_widget(self._l_qt_A, 1)
+        lay.add_widget(Label(""), 1)
+        lay.add_widget(self._l_qt_B, 1)
+        lay.add_widget(Label(""), 1)
+        lay.add_widget(self._l_qt_C, 1)
+        lay.add_widget(Label(""), 1)
+        lay.add_widget(self._l_qt_D, 1)
+        lay.add_widget(Label(""), 1)
+        lay.add_widget(self._l_qt_E, 1)
+
+        self._l_list_A=Label(label="")
+        self._l_list_B=Label(label="")
+        self._l_list_C=Label(label="")
+        self._l_list_D=Label(label="")
+        self._l_list_E=Label(label="")
+
+        lay.add_widget(Label("Composants Epuises"), 2)
+        lay.add_widget(Label(""), 2)
+        lay.add_widget(self._l_list_A, 2)
+        lay.add_widget(Label(""), 2)
+        lay.add_widget(self._l_list_B, 2)
+        lay.add_widget(Label(""), 2)
+        lay.add_widget(self._l_list_C, 2)
+        lay.add_widget(Label(""), 2)
+        lay.add_widget(self._l_list_D, 2)
+        lay.add_widget(Label(""), 2)
+        lay.add_widget(self._l_list_E, 2)
 
         ly2=Layout([100])
         self.add_layout(ly2)
         ly2.add_widget(Button("Quit",self._quit))
         self.fix()
+
+    def _on_load(self):
+        self._l_qt_A.text=str(self._model.count_empty("A"))
+        self._l_qt_B.text=str(self._model.count_empty("B"))
+        self._l_qt_C.text=str(self._model.count_empty("C"))
+        self._l_qt_D.text=str(self._model.count_empty("D"))
+        self._l_qt_E.text=str(self._model.count_empty("E"))
+        le = ""
+        for i in self._model.list_empty("A"):
+            le += i + ", "
+        self._l_list_A.text = le
+        le = "" 
+        for i in self._model.list_empty("B"):
+            le += i + ", "
+        self._l_list_B.text = le
+        le = "" 
+        for i in self._model.list_empty("C"):
+            le += i + ", "
+        self._l_list_C.text = le
+        le = "" 
+        for i in self._model.list_empty("D"):
+            le += i + ", "
+        self._l_list_D.text = le
+        le = "" 
+        for i in self._model.list_empty("E"):
+            le += i + ", "
+        self._l_list_E.text = le
 
     @staticmethod
     def _to_rack(r):
@@ -60,7 +118,7 @@ class BoxListView(Frame):
         self._model = model
 
         # Create the form for displaying the list of parts.
-        self._list_view = ListBox(
+        self._list_view = MultiColumnListBox(
             Widget.FILL_FRAME,
             model.get_summary(),
             name="parts",
