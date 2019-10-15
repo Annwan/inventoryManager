@@ -79,3 +79,6 @@ class InventoryModel(object):
             if i[0] == 0 and i[1][0] == rack:
                 lst.append(i[2])
         return lst
+
+    def list_box(self, rack):
+        return 
