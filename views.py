@@ -1,7 +1,9 @@
 from asciimatics.widgets import Frame, ListBox, Layout, Divider, Text, \
-    Button, TextBox, Widget, MultiColumnListBox, Label
+    Button, TextBox, Widget, MultiColumnListBox, Label, THEMES
 from asciimatics.exceptions import NextScene, StopApplication
+from schemes import colorScheme as cs
 
+THEMES["cs"] = cs
 
 class MainView(Frame):
     def __init__(self, screen, model):
@@ -14,7 +16,7 @@ class MainView(Frame):
                 can_scroll=False,
                 title = "Gestion Des stocks"
         )
-        self.set_theme("bright")
+        self.set_theme("cs")
         self._model = model
         lay=Layout([1,1,8],fill_frame=True)
         self.add_layout(lay)
@@ -128,7 +130,7 @@ class BoxListView(Frame):
             on_select=self._edit,
             name="parts"
         )
-        self.set_theme("bright")
+        self.set_theme("cs")
         self._edit_button = Button("Edit", self._edit)
         self._delete_button = Button("Delete", self._delete)
         layout = Layout([100], fill_frame=True)
@@ -183,7 +185,7 @@ class RackView(Frame):
             can_scroll=False,
             reduce_cpu=True
         )
-        self.set_theme("bright")
+        self.set_theme("cs")
         self._rack = rack
         self._model = model
         ly = Layout([1,2,2,2,2,2])
@@ -227,7 +229,7 @@ class PartView(Frame):
             title="Part Details",
             reduce_cpu=True
         )
-        self.set_theme("tlj256")
+        self.set_theme("cs")
         # Save off the model that accesses the parts database.
         self._model = model
 
