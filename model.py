@@ -80,5 +80,9 @@ class InventoryModel(object):
                 lst.append(i[2])
         return lst
 
-    def list_box(self, rack):
-        return 
+    def get_items_in_box(self, box):
+        items = self._db.cursor().execute('SELECT name, mcat, scat1, scat2, amnt FROM parts WHERE pos = :box', {"box": box}).fetchall()
+        lst = []
+        for i,it in enumerate(items):
+            lst.append((it, i))
+        return lst

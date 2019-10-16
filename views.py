@@ -14,6 +14,7 @@ class MainView(Frame):
                 can_scroll=False,
                 title = "Gestion Des stocks"
         )
+        self.set_theme("bright")
         self._model = model
         lay=Layout([1,1,8],fill_frame=True)
         self.add_layout(lay)
@@ -113,20 +114,21 @@ class BoxListView(Frame):
                                        on_load=self._reload_list,
                                        hover_focus=True,
                                        can_scroll=False,
-                                       title="Part List")
+                                       title=f"Boite {model.current_pos}")
         # Save off the model that accesses the parts database.
         self._model = model
-
         # Create the form for displaying the list of parts.
         self._list_view = MultiColumnListBox(
-            height=4,
+            Widget.FILL_FRAME,
             columns=['30%', '20%', '20%', '20%', '10%'],
-            options=[].extend(self._model.get_items_in_box(self._model.current_pos)),
+            options=self._model.get_items_in_box(self._model.current_pos),
             titles=['Name', 'Cat', 'S-Cat', 'S-S-Cat', 'Qte'],
             add_scroll_bar=True,
             on_change=self._on_pick,
-            on_select=self._edit
+            on_select=self._edit,
+            name="parts"
         )
+        self.set_theme("bright")
         self._edit_button = Button("Edit", self._edit)
         self._delete_button = Button("Delete", self._delete)
         layout = Layout([100], fill_frame=True)
@@ -147,8 +149,9 @@ class BoxListView(Frame):
         self._delete_button.disabled = self._list_view.value is None
 
     def _reload_list(self, new_value=None):
-        self._list_view.options = self._model.get_summary()
+        self._list_view.options = self._model.get_items_in_box(self._model.current_pos)
         self._list_view.value = new_value
+        self.title = f"Boite {self._model.current_pos}"
 
     def _add(self):
         self._model.current_id = None
@@ -180,6 +183,7 @@ class RackView(Frame):
             can_scroll=False,
             reduce_cpu=True
         )
+        self.set_theme("bright")
         self._rack = rack
         self._model = model
         ly = Layout([1,2,2,2,2,2])
@@ -191,7 +195,8 @@ class RackView(Frame):
             self.add_layout(layout)
             layout.add_widget(Label(label=f"{r}", align="^"), 0)
             for c in range(1,6):
-                lab = Button(text=f"{rack}{r}{c}", on_click=lambda:self._onButtonPress(r, c))
+                action = lambda row=r, col=c:self._onButtonPress(row, col)
+                lab = Button(text=f"{rack}{r}{c}", on_click=action)
                 lab.disabled = (r == 9 and c >= 2) or (r == 8 and c == 5)
                 layout.add_widget(lab, c)
             ly3 = Layout([100])
@@ -203,7 +208,7 @@ class RackView(Frame):
         self.fix()
 
     def _onButtonPress(self, row, col):
-        self._model.current_pos = f"{self._rack}{row}{col}"
+        self._model.current_pos = f"{self._rack}{str(row)}{str(col)}"
         raise NextScene("Box")
 
     @staticmethod
@@ -213,13 +218,16 @@ class RackView(Frame):
 
 class PartView(Frame):
     def __init__(self, screen, model):
-        super(PartView, self).__init__(screen,
-                                          screen.height * 4 // 5,
-                                          screen.width * 4 // 5,
-                                          hover_focus=True,
-                                          can_scroll=False,
-                                          title="Part Details",
-                                          reduce_cpu=True)
+        super(PartView, self).__init__(
+            screen,
+            screen.height * 4 // 5,
+            screen.width * 4 // 5,
+            hover_focus=True,
+            can_scroll=False,
+            title="Part Details",
+            reduce_cpu=True
+        )
+        self.set_theme("bright")
         # Save off the model that accesses the parts database.
         self._model = model
 

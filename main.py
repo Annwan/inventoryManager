@@ -1,3 +1,4 @@
+#!bin/python3
 from asciimatics.scene import Scene
 from asciimatics.screen import Screen
 from asciimatics.exceptions import ResizeScreenError
