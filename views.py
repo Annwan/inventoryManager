@@ -227,7 +227,7 @@ class PartView(Frame):
             title="Part Details",
             reduce_cpu=True
         )
-        self.set_theme("bright")
+        self.set_theme("tlj256")
         # Save off the model that accesses the parts database.
         self._model = model
 
