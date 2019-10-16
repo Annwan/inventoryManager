@@ -8,4 +8,5 @@ Include/
 bin/
 include/
 lib/
+share/
 lib64/
