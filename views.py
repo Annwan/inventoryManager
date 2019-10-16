@@ -9,14 +9,14 @@ class MainView(Frame):
                 screen,
                 screen.height,
                 screen.width,
-                on_load=self._on_load,
+                on_load=self._load,
                 hover_focus=True,
                 can_scroll=False,
-                title = "Titre temporaire"
+                title = "Gestion Des stocks"
         )
         self._model = model
         lay=Layout([1,1,8],fill_frame=True)
-        self.add_layout(lay);
+        self.add_layout(lay)
         lay.add_widget(Label("Rack"), 0)
         lay.add_widget(Label(""), 0)
         lay.add_widget(Button(f"Rack A", lambda:self._to_rack("A")),0)
@@ -70,7 +70,7 @@ class MainView(Frame):
         ly2.add_widget(Button("Quit",self._quit))
         self.fix()
 
-    def _on_load(self):
+    def _load(self):
         self._l_qt_A.text=str(self._model.count_empty("A"))
         self._l_qt_B.text=str(self._model.count_empty("B"))
         self._l_qt_C.text=str(self._model.count_empty("C"))
@@ -119,12 +119,14 @@ class BoxListView(Frame):
 
         # Create the form for displaying the list of parts.
         self._list_view = MultiColumnListBox(
-            Widget.FILL_FRAME,
-            model.get_summary(),
-            name="parts",
+            height=4,
+            columns=['30%', '20%', '20%', '20%', '10%'],
+            options=[].extend(self._model.get_items_in_box(self._model.current_pos)),
+            titles=['Name', 'Cat', 'S-Cat', 'S-S-Cat', 'Qte'],
             add_scroll_bar=True,
             on_change=self._on_pick,
-            on_select=self._edit)
+            on_select=self._edit
+        )
         self._edit_button = Button("Edit", self._edit)
         self._delete_button = Button("Delete", self._delete)
         layout = Layout([100], fill_frame=True)
