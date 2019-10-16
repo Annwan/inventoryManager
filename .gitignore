@@ -9,4 +9,4 @@ bin/
 include/
 lib/
 share/
-lib64/
+lib64
